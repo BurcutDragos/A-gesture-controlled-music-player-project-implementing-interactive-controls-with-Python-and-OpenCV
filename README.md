@@ -53,3 +53,19 @@ Start the application by running: python music_player.py
     * Show a "Thumb Up" gesture to repeat the current song.
     * Make a "Victory" sign to stop the current song.
     * <b>Note:</b> To use gesture control effectively, maintain proper lighting and adjust hand positions as needed for accurate recognition.
+
+## Project Structure:
+* gesture_collector.py: collects gesture data through the video camera. Using Mediapipe for hand detection, it captures hand landmarks and saves them as .npy files. The collected data is later used to train the gesture recognition model, enabling accurate gesture identification.
+* gesture_model.py: defines the neural network model used for gesture recognition. It loads the previously saved gesture data, prepares it for training, and creates a model that can classify different gestures based on hand landmarks. The trained model is then saved for later use in the gesture recognition application.
+* gesture_recognizer.py: Defines the gesture recognition logic, utilizing the camera and Mediapipe's hand landmark detection.
+* music_player.py: Core file containing the music player functionality.
+* Songs/: Folder where all playable music files are stored.
+* requirements.txt: Contains all required Python libraries for easy setup.
+
+## Future Enhancements:
+* Adding more customizable gesture options.
+* Support for different media formats (e.g., .wav, .flac).
+* Implementing improved error handling and user feedback.
+
+## License:
+This project is licensed under the GPL-3.0 License - see the LICENSE file for details.
