@@ -8,7 +8,7 @@ def load_gesture_data():
     gestures_dir = "gestures"  # The folder where gesture data is stored.
     if not os.path.exists(gestures_dir):  # Checks if the 'gestures' folder exists.
         print(f"Error: The folder '{gestures_dir}' does not exists.")  # Error message if the folder does not exist.
-        return None, None, None  # Returns None if the folder does not exist.
+        return None, None, None  # Returns None value if the folder does not exist.
 
     # List of desired gestures to be loaded.
     desired_gestures = ['Play', 'Pause', 'Next', 'Previous', 'Volume Up', 'Volume Down', 'Victory', 'Thumb Up',
@@ -25,7 +25,7 @@ def load_gesture_data():
             print(f"Warning: Folder for gesture '{gesture}' does not exist.")  # Displays a warning if it doesn't exist.
             continue  # Go to the next gesture if the directory does not exist.
 
-        gesture_files = os.listdir(gesture_dir)  # We list the files in the current gesture directory.
+        gesture_files = os.listdir(gesture_dir)  # Lists the files in the current gesture directory.
         if not gesture_files:  # Checks for files in the directory.
             print(f"Warning: No files found for gesture '{gesture}'.")  # Displays a warning if there are no files.
             continue  # Go to the next gesture if there are no files.
@@ -42,7 +42,7 @@ def load_gesture_data():
 
     if not images:  # Checks if no images have been uploaded.
         print("Error: Could not load data for any gesture.")  # Error message if no images found.
-        return None, None, None  # Returns None if no images have been loaded.
+        return None, None, None  # Returns None value if no images have been loaded.
 
     images = np.array(images)  # Converts the list of images to a NumPy array.
     labels = np.array(labels)  # Converts the list of tags to a NumPy array.
@@ -80,7 +80,7 @@ def train_model():
     # Displays the model architecture summary.
     model.summary()
 
-    # Train the model using the loaded data.
+    # Trains the model using the loaded data.
     model.fit(images, labels, epochs=50, validation_split=0.2, batch_size=32)  # Training on 50 epochs with 20% validation data and batch-size of 32.
 
     # Saves the trained model to a .h5 file.
