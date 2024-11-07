@@ -1,92 +1,92 @@
-import os # Biblioteca pentru interacțiunea cu sistemul de fișiere.
-import numpy as np # Biblioteca pentru manipularea datelor numerice (arrays).
-import tensorflow as tf # Biblioteca TensorFlow pentru construirea și antrenarea rețelelor neuronale.
-from tensorflow.keras import layers, models # Importă layerele și modelele din Keras, care face parte din TensorFlow.
+import os # Library for interacting with the file system.
+import numpy as np # Library for manipulating numerical data (arrays).
+import tensorflow as tf # TensorFlow library for building and training neural networks.
+from tensorflow.keras import layers, models # Import layers and models from Keras, which is part of TensorFlow.
 
-# Funcția pentru încărcarea datelor despre gesturi.
+# Function for loading gesture data.
 def load_gesture_data():
-    gestures_dir = "gestures"  # Directorul unde sunt stocate datele despre gesturi.
-    if not os.path.exists(gestures_dir):  # Verifică dacă directorul 'gestures' există.
-        print(f"Eroare: Directorul '{gestures_dir}' nu există.")  # Mesaj de eroare dacă directorul nu există.
-        return None, None, None  # Returnează None dacă directorul nu există.
+    gestures_dir = "gestures"  # The folder where gesture data is stored.
+    if not os.path.exists(gestures_dir):  # Checks if the 'gestures' folder exists.
+        print(f"Error: The folder '{gestures_dir}' does not exists.")  # Error message if the folder does not exist.
+        return None, None, None  # Returns None if the folder does not exist.
 
-    # Lista gesturilor dorite care trebuie încărcate.
+    # List of desired gestures to be loaded.
     desired_gestures = ['Play', 'Pause', 'Next', 'Previous', 'Volume Up', 'Volume Down', 'Victory', 'Thumb Up',
                         'Rock and Roll']
 
-    images = []  # Listă pentru a stoca imaginile/landmark-urile gesturilor.
-    labels = []  # Listă pentru a stoca etichetele asociate gesturilor.
-    gestures = []  # Listă pentru a stoca gesturile reale (numele acestora).
+    images = []  # List to store gesture images/landmarks.
+    labels = []  # List to store tags associated with gestures.
+    gestures = []  # List to store the actual gestures (their names).
 
-    # Iterează prin fiecare gest dorit și încarcă fișierele .npy corespunzătoare.
+    # Iterates through each desired gesture and load the corresponding .npy files.
     for label, gesture in enumerate(desired_gestures):
-        gesture_dir = os.path.join(gestures_dir, gesture)  # Creează calea către directorul pentru fiecare gest.
-        if not os.path.isdir(gesture_dir):  # Verifică dacă directorul pentru gest există.
-            print(f"Avertisment: Directorul pentru gestul '{gesture}' nu există.")  # Afișează un avertisment dacă nu există.
-            continue  # Trece la următorul gest dacă directorul nu există.
+        gesture_dir = os.path.join(gestures_dir, gesture)  # Creates the folder path for each gesture.
+        if not os.path.isdir(gesture_dir):  # Checks if the directory for the gesture exists.
+            print(f"Warning: Folder for gesture '{gesture}' does not exist.")  # Displays a warning if it doesn't exist.
+            continue  # Go to the next gesture if the directory does not exist.
 
-        gesture_files = os.listdir(gesture_dir)  # Listăm fișierele din directorul gestului curent.
-        if not gesture_files:  # Verifică dacă există fișiere în director.
-            print(f"Avertisment: Nu s-au găsit fișiere pentru gestul '{gesture}'.")  # Afișează un avertisment dacă nu sunt fișiere.
-            continue  # Trece la următorul gest dacă nu există fișiere.
+        gesture_files = os.listdir(gesture_dir)  # We list the files in the current gesture directory.
+        if not gesture_files:  # Checks for files in the directory.
+            print(f"Warning: No files found for gesture '{gesture}'.")  # Displays a warning if there are no files.
+            continue  # Go to the next gesture if there are no files.
 
-        gestures.append(gesture)  # Adaugă gestul în lista de gesturi.
-        for file_name in gesture_files:  # Iterează prin fișierele din directorul gestului curent.
-            file_path = os.path.join(gesture_dir, file_name)  # Creează calea completă către fișier.
-            if file_name.endswith('.npy'):  # Verifică dacă fișierul este de tip .npy (fișier NumPy).
-                landmarks = np.load(file_path)  # Încarcă datele din fișierul .npy.
-                images.append(landmarks)  # Adaugă landmark-urile în lista de imagini.
-                labels.append(label)  # Adaugă eticheta (indexul gestului) în lista de etichete.
+        gestures.append(gesture)  # Adds the gesture to the list of gestures.
+        for file_name in gesture_files:  # Iterates through the files in the current gesture directory.
+            file_path = os.path.join(gesture_dir, file_name)  # Creates the full path to the file.
+            if file_name.endswith('.npy'):  # Checks if the file is of type .npy (NumPy file).
+                landmarks = np.load(file_path)  # Loads the data from the .npy file.
+                images.append(landmarks)  # Adds landmarks to the list of images.
+                labels.append(label)  # Adds the tag (gesture index) to the tag list.
             else:
-                print(f"Avertisment: Fișierul '{file_name}' nu este de tip .npy și va fi ignorat.")  # Afișează avertisment dacă fișierul nu este .npy.
+                print(f"Warning: File '{file_name}' is not of type .npy and will be ignored.")  # Displays warning if file is not .npy.
 
-    if not images:  # Verifică dacă nu s-au încărcat imagini.
-        print("Eroare: Nu s-au putut încărca datele pentru niciun gest.")  # Mesaj de eroare dacă nu s-au găsit imagini.
-        return None, None, None  # Returnează None dacă nu s-au încărcat imagini.
+    if not images:  # Checks if no images have been uploaded.
+        print("Error: Could not load data for any gesture.")  # Error message if no images found.
+        return None, None, None  # Returns None if no images have been loaded.
 
-    images = np.array(images)  # Convertim lista de imagini într-un array NumPy.
-    labels = np.array(labels)  # Convertim lista de etichete într-un array NumPy.
+    images = np.array(images)  # Converts the list of images to a NumPy array.
+    labels = np.array(labels)  # Converts the list of tags to a NumPy array.
 
-    return images, labels, gestures  # Returnează imaginile, etichetele și gesturile.
+    return images, labels, gestures  # Returns images, tags, and gestures.
 
-# Funcția pentru antrenarea modelului de recunoaștere a gesturilor.
+# The function for training the gesture recognition model.
 def train_model():
-    images, labels, gestures = load_gesture_data()  # Încarcă datele despre gesturi.
-    if images is None or labels is None or gestures is None:  # Verifică dacă datele au fost încărcate corect.
-        print("Antrenarea modelului a eșuat din cauza lipsei datelor.")  # Afișează un mesaj dacă datele lipsesc.
-        return  # Ieșire din funcție dacă datele lipsesc.
+    images, labels, gestures = load_gesture_data()  # Loads gesture data.
+    if images is None or labels is None or gestures is None:  # Checks if the data has been loaded correctly.
+        print("Model training failed due to missing data.")  # Displays a message if data is missing.
+        return  # Exit function if data is missing.
 
-    # Afișează informații despre datele încărcate.
-    print(f"Forma datelor de intrare: {images.shape}")  # Afișează forma datelor de intrare (imaginile).
-    print(f"Forma etichetelor: {labels.shape}")  # Afișează forma etichetelor.
-    print(f"Număr de gesturi: {len(gestures)}")  # Afișează numărul de gesturi încărcate.
-    print(f"Gesturi incluse: {gestures}")  # Afișează lista de gesturi incluse.
+    # Displays information about uploaded data.
+    print(f"Form of input data: {images.shape}")  # Displays the shape of the input data (images).
+    print(f"Form of labels: {labels.shape}")  # Shows the shape of the labels.
+    print(f"Number of gestures: {len(gestures)}")  # Shows the number of gestures loaded.
+    print(f"Gestures included: {gestures}")  # Shows the list of included gestures.
 
-    # Definirea arhitecturii modelului neuronal.
+    # Defining the architecture of the neural model.
     model = models.Sequential([
-        layers.Input(shape=(63,)),  # Definim input-ul de 63 de valori (21 de puncte de referință pentru fiecare dimensiune x, y, z).
-        layers.Dense(128, activation='relu'),  # Primul strat dens cu 128 de neuroni și funcția de activare ReLU.
-        layers.Dropout(0.3),  # Strat de dropout cu 30% pentru a preveni overfitting-ul.
-        layers.Dense(64, activation='relu'),  # Al doilea strat dens cu 64 de neuroni și funcția de activare ReLU.
-        layers.Dropout(0.3),  # Strat de dropout cu 30% pentru a preveni overfitting-ul.
-        layers.Dense(len(gestures), activation='softmax')  # Stratul de ieșire cu numărul de gesturi și activarea Softmax pentru clasificare.
+        layers.Input(shape=(63,)),  # Defines the input of 63 values ​​(21 reference points for each x, y, z dimension).
+        layers.Dense(128, activation='relu'),  # The first dense layer with 128 neurons and the ReLU activation function.
+        layers.Dropout(0.3),  # 30% dropout layer to prevent overfitting.
+        layers.Dense(64, activation='relu'),  # The second dense layer with 64 neurons and the ReLU activation function.
+        layers.Dropout(0.3),  # 30% dropout layer to prevent overfitting.
+        layers.Dense(len(gestures), activation='softmax')  # Output layer with gesture counts and Softmax activation for classification.
     ])
 
-    # Compilăm modelul cu optimizer-ul Adam și funcția de pierdere 'sparse_categorical_crossentropy'.
+    # Compiles the model with the Adam optimizer and the 'sparse_categorical_crossentropy' loss function.
     model.compile(optimizer='adam',
                   loss='sparse_categorical_crossentropy',
-                  metrics=['accuracy'])  # Afișează precizia ca metrică de evaluare.
+                  metrics=['accuracy'])  # Shows accuracy as an evaluation metric.
 
-    # Afișează sumarul arhitecturii modelului.
+    # Displays the model architecture summary.
     model.summary()
 
-    # Antrenăm modelul folosind datele încărcate.
-    model.fit(images, labels, epochs=50, validation_split=0.2, batch_size=32)  # Antrenare pe 50 de epoci cu 20% date de validare și batch-size de 32.
+    # Train the model using the loaded data.
+    model.fit(images, labels, epochs=50, validation_split=0.2, batch_size=32)  # Training on 50 epochs with 20% validation data and batch-size of 32.
 
-    # Salvăm modelul antrenat într-un fișier .h5.
-    model.save("gesture_model.h5")  # Salvăm modelul într-un fișier h5.
-    print("Modelul a fost antrenat și salvat ca 'gesture_model.h5'.")  # Afișează mesajul de succes al salvării modelului.
+    # Saves the trained model to a .h5 file.
+    model.save("gesture_model.h5")  # Saves the model to an h5 file.
+    print("The model has been trained and saved as 'gesture_model.h5'.")  # Shows the model save success message.
 
-# Verificăm dacă acest script este rulat direct.
+# Checks if this script is run directly.
 if __name__ == "__main__":
-    train_model()  # Apelăm funcția pentru antrenarea modelului.
+    train_model()  # Calls the function to train the model.
