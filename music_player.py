@@ -1,105 +1,105 @@
-import tkinter as tk  # Biblioteca pentru construirea interfeței grafice.
-from tkinter import ttk  # Extensie pentru widgeturi avansate în tkinter.
-import pygame  # Biblioteca pentru redarea sunetelor și a muzicii.
-import os  # Biblioteca pentru interacțiunea cu sistemul de fișiere.
-from mutagen.mp3 import MP3  # Biblioteca pentru manipularea fișierelor MP3 și obținerea informațiilor despre acestea.
-import time  # Biblioteca pentru gestionarea timpului.
-import cv2  # Biblioteca pentru capturarea și manipularea imaginilor video.
-import threading  # Biblioteca pentru gestionarea firelor de execuție.
-from gesture_recognizer import recognize_gesture, detect_motion  # Funcții pentru recunoașterea gesturilor și detectarea mișcării.
+import tkinter as tk  # The library for building the GUI.
+from tkinter import ttk  # Extension for advanced widgets in tkinter.
+import pygame  # Library for playing sounds and music.
+import os  # Library for interacting with the file system.
+from mutagen.mp3 import MP3  # Library for manipulating MP3 files and getting information about them.
+import time  # Time management library.
+import cv2  # Library for capturing and manipulating video images.
+import threading  # The library for managing threads.
+from gesture_recognizer import recognize_gesture, detect_motion  # Features for gesture recognition and motion detection.
 
-# Clasa pentru playerul de muzică.
+# The class for the music player.
 class MusicPlayer:
     def __init__(self, master):
-        self.master = master  # Referință la fereastra principală.
-        self.master.title("Music Player")  # Titlul ferestrei.
-        self.master.geometry("400x400")  # Dimensiunea ferestrei.
-        self.master.minsize(400, 400)  # Dimensiunea minimă a ferestrei.
+        self.master = master  # Reference to main window.
+        self.master.title("Music Player")  # The title of the window.
+        self.master.geometry("400x400")  # The size of the window.
+        self.master.minsize(400, 400)  # Minimum window size.
 
-        pygame.mixer.init()  # Inițializăm mixerul pentru redarea sunetelor.
+        pygame.mixer.init()  # Initializes the mixer for playing sounds.
 
-        # Variabile de stare ale playerului.
-        self.is_playing = False  # Indică dacă muzica este redată.
-        self.is_repeat = False  # Indică dacă modul Repeat este activ.
-        self.current_time = 0  # Timpul curent al melodiei.
-        self.song_length = 0  # Durata totală a melodiei.
-        self.current_song_index = 0  # Indexul melodiei curente.
-        self.songs = self.get_songs()  # Obținem lista de melodii.
-        self.last_repeat_time = 0  # Momentul ultimei apăsări a butonului Repeat.
-        self.repeat_cooldown = 2  # Cooldown de 2 secunde pentru butonul Repeat.
-        self.repeat_active_color = '#a0a0a0'  # Culoarea butonului Repeat activat.
-        self.repeat_inactive_color = '#e0e0e0'  # Culoarea butonului Repeat dezactivat.
+        # Player state variables.
+        self.is_playing = False  # Indicates whether music is playing.
+        self.is_repeat = False  # Indicates whether Repeat mode is active.
+        self.current_time = 0  # The current time of the song.
+        self.song_length = 0  # Total duration of the song.
+        self.current_song_index = 0  # Current song index.
+        self.songs = self.get_songs()  # Gets the playlist.
+        self.last_repeat_time = 0  # The time of the last press of the Repeat button.
+        self.repeat_cooldown = 2  # Two second cooldown for Repeat button.
+        self.repeat_active_color = '#a0a0a0'  # The color of the activated Repeat button.
+        self.repeat_inactive_color = '#e0e0e0'  # The color of the disabled Repeat button.
 
-        self.create_widgets()  # Creăm elementele de interfață.
+        self.create_widgets()  # Creates the interface elements.
 
-        if self.songs:  # Dacă există melodii, încărcăm prima melodie.
+        if self.songs:  # If there are songs, we load the first song.
             self.load_song()
 
-        self.gesture_control_active = False  # Indică dacă controlul prin gesturi este activ.
-        self.gesture_thread = None  # Firul de execuție pentru gesturi este inițializat cu None.
-        # Buton pentru activarea controlului prin gesturi.
+        self.gesture_control_active = False  # Indicates whether gesture control is active.
+        self.gesture_thread = None  # The gesture thread is initialized to None value.
+        # Button to activate gesture control.
         self.gesture_control_button = tk.Button(self.master, text="Activare control gestual",
                                                 command=self.toggle_gesture_control)
-        self.gesture_control_button.pack(pady=10)  # Afișăm butonul în interfață.
+        self.gesture_control_button.pack(pady=10)  # Shows the button in the interface.
 
-        # Actualizăm timpul și verificăm sfârșitul melodiei periodic.
+        # It updates the time and checks the end of the song periodically.
         self.master.after(100, self.update_time)
         self.master.after(500, self.check_end)
 
-    # Funcția pentru crearea elementelor de interfață grafică.
+    # Function for creating GUI elements.
     def create_widgets(self):
-        # Eticheta care afișează informațiile despre melodie.
+        # The label that displays the song information.
         self.song_info_label = tk.Label(self.master, text="", font=("Arial", 12))
-        self.song_info_label.pack(pady=5)  # Afișăm eticheta în interfață.
+        self.song_info_label.pack(pady=5)  # Shows the label in the interface.
 
-        # Cadru pentru timpul curent și timpul total.
+        # Frame for current time and total time.
         self.time_frame = tk.Frame(self.master)
-        self.time_frame.pack(fill='x', padx=20)  # Afișăm cadrul în interfață.
+        self.time_frame.pack(fill='x', padx=20)  # Shows the frame in the interface.
 
-        # Eticheta pentru timpul curent al melodiei.
+        # Tag for the current time of the song.
         self.current_time_label = tk.Label(self.time_frame, text="00:00")
-        self.current_time_label.pack(side='left')  # Afișăm eticheta în stânga.
+        self.current_time_label.pack(side='left')  # Shows the label on the left.
 
-        # Eticheta pentru timpul total al melodiei.
+        # Tag for the total time of the song.
         self.total_time_label = tk.Label(self.time_frame, text="00:00")
-        self.total_time_label.pack(side='right')  # Afișăm eticheta în dreapta.
+        self.total_time_label.pack(side='right')  # Shows the label on the right.
 
-        # Bara de progres pentru redarea melodiei.
+        # Progress bar for song playback.
         self.progress_canvas = tk.Canvas(self.master, height=10, bg="white")
-        self.progress_canvas.pack(fill='x', padx=20)  # Afișăm bara de progres.
-        # Creăm o bară de progres albastră.
+        self.progress_canvas.pack(fill='x', padx=20)  # Shows progress bar.
+        # Creates a blue progress bar.
         self.progress_bar = self.progress_canvas.create_rectangle(0, 0, 0, 10, fill="#1E90FF")
 
-        # Cadru pentru butoanele de control (Play, Next, Previous, etc.).
+        # Frame for control buttons (Play, Next, Previous, etc.).
         self.control_frame = tk.Frame(self.master)
-        self.control_frame.pack(pady=20)  # Afișăm cadrul pentru butoane.
+        self.control_frame.pack(pady=20)  # Shows the button frame.
 
-        # Definim butoanele și acțiunile lor.
+        # Defines the buttons and their actions.
         button_data = [
-            ("⏮", self.previous, '#e0e0e0'),  # Buton Previous.
-            ("▶", self.play_pause, '#e0e0e0'),  # Buton Play/Pause.
-            ("⏹", self.stop, '#e0e0e0'),  # Buton Stop.
-            ("⏭", self.next, '#e0e0e0'),  # Buton Next.
-            ("🔁", self.toggle_repeat, '#e0e0e0')  # Buton Repeat.
+            ("⏮", self.previous, '#e0e0e0'),  # Previous button.
+            ("▶", self.play_pause, '#e0e0e0'),  # Play/Pause button.
+            ("⏹", self.stop, '#e0e0e0'),  # Stop button.
+            ("⏭", self.next, '#e0e0e0'),  # Next button.
+            ("🔁", self.toggle_repeat, '#e0e0e0')  # Repeat button.
         ]
 
-        self.buttons = {}  # Dicționar pentru stocarea butoanelor.
+        self.buttons = {}  # Dictionary for storing buttons.
         for symbol, command, color in button_data:
-            # Creăm fiecare buton și îl adăugăm în interfață.
+            # Creates each button and add it to the interface.
             btn = tk.Button(self.control_frame, text=symbol, command=command,
                             font=("Arial", 16), width=3, bg=color)
-            btn.pack(side='left', padx=10)  # Afișăm butonul în interfață.
-            # Adăugăm efecte hover la butoane.
+            btn.pack(side='left', padx=10)  # Shows the button in the interface.
+            # Adds hover effects to buttons.
             btn.bind("<Enter>", lambda e, b=btn: self.on_hover(b))
             btn.bind("<Leave>", lambda e, b=btn: self.on_leave(b))
-            self.buttons[symbol] = btn  # Stocăm butonul în dicționar.
+            self.buttons[symbol] = btn  # Stores the button in the dictionary.
 
-        # Slider pentru controlul volumului.
-        self.volume_var = tk.IntVar()  # Variabilă pentru stocarea valorii volumului.
+        # Slider for volume control.
+        self.volume_var = tk.IntVar()  # Variable to store the volume value.
         self.volume_slider = ttk.Scale(self.master, from_=0, to=100, orient='horizontal',
                                        variable=self.volume_var, command=self.set_volume)
-        self.volume_slider.set(50)  # Setăm volumul inițial la 50%.
-        self.volume_slider.pack(fill='x', padx=20, pady=20)  # Afișăm sliderul în interfață.
+        self.volume_slider.set(50)  # Sets the initial volume to 50%.
+        self.volume_slider.pack(fill='x', padx=20, pady=20)  # Shows the slider in the interface.
 
         # Legăm diverse funcții la taste (Play/Pause, Previous, Next, etc.).
         self.master.bind('<space>', lambda e: self.play_pause())  # Butonul Play/Pause.
