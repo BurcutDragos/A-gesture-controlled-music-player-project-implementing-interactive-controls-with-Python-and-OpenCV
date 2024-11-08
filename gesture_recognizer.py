@@ -3,7 +3,7 @@ import tensorflow as tf  # TensorFlow library for using machine learning model.
 import numpy as np  # The library for manipulating numerical data (arrays).
 import mediapipe as mp  # Mediapipe library for hand detection and tracking.
 
-# Load the gesture recognition model only once for efficiency.
+# Loads the gesture recognition model only once for efficiency.
 model = tf.keras.models.load_model("gesture_model.h5")
 # Initializes Mediapipe's Hands solution for hand detection and tracking.
 mp_hands = mp.solutions.hands
@@ -40,7 +40,7 @@ def recognize_gesture(frame):
             gesture_name = gestures[predicted_class]
             return gesture_name, confidence
 
-    # If no hands were detected, we return None and a confidence of 0.
+    # If no hands were detected, returns None value and a confidence of 0.
     return None, 0.0
 
 # The function for detecting motion between two consecutive frames.
@@ -64,13 +64,13 @@ if __name__ == "__main__":
     while True:
         # Reads a new frame from the webcam.
         ret, frame = cap.read()
-        if not ret:  # If we can't read the frame, we exit the loop.
+        if not ret:  # If the frame cannot be read, the loop is exited.
             break
 
-        # It resizes the frame to reduce resource consumption and speed up processing.
+        # Resizes the frame to reduce resource consumption and speed up processing.
         frame = cv2.resize(frame, (320, 240))
 
-        # If there is a previous frame and no significant motion is detected, we continue to the next frame.
+        # If there is a previous frame and no significant motion is detected, it continues to the next frame.
         if prev_frame is not None and not detect_motion(frame, prev_frame):
             prev_frame = frame  # Updates the previous frame with the current frame.
             continue  # Skips the rest of the loop if no motion is detected.
