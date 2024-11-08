@@ -101,67 +101,67 @@ class MusicPlayer:
         self.volume_slider.set(50)  # Sets the initial volume to 50%.
         self.volume_slider.pack(fill='x', padx=20, pady=20)  # Shows the slider in the interface.
 
-        # Legăm diverse funcții la taste (Play/Pause, Previous, Next, etc.).
-        self.master.bind('<space>', lambda e: self.play_pause())  # Butonul Play/Pause.
-        self.master.bind('a', lambda e: self.previous())  # Butonul Previous.
-        self.master.bind('d', lambda e: self.next())  # Butonul Next.
-        self.master.bind('<Up>', lambda e: self.adjust_volume(5))  # Creșterea volumului.
-        self.master.bind('<Down>', lambda e: self.adjust_volume(-5))  # Scăderea volumului.
-        self.master.bind('<Return>', lambda e: self.toggle_repeat())  # Activare/Dezactivare Repeat.
-        self.master.bind('<Delete>', lambda e: self.stop())  # Oprire redare.
+        # Binds various functions to keys (Play/Pause, Previous, Next, etc.).
+        self.master.bind('<space>', lambda e: self.play_pause())  # Play/Pause button.
+        self.master.bind('a', lambda e: self.previous())  # Previous button.
+        self.master.bind('d', lambda e: self.next())  # Next button.
+        self.master.bind('<Up>', lambda e: self.adjust_volume(5))  # Increases the sound volume.
+        self.master.bind('<Down>', lambda e: self.adjust_volume(-5))  # Decreases the sound volume.
+        self.master.bind('<Return>', lambda e: self.toggle_repeat())  # Enable/Disable Repeat option.
+        self.master.bind('<Delete>', lambda e: self.stop())  # Stop playback.
 
-    # Funcție pentru activarea/dezactivarea controlului prin gesturi.
+    # Feature to enable/disable gesture control.
     def toggle_gesture_control(self):
-        if self.gesture_control_active:  # Dacă controlul prin gesturi este activ.
-            self.gesture_control_active = False  # Dezactivăm controlul prin gesturi.
-            self.gesture_control_button.config(text="Activare control gestual")  # Schimbăm textul butonului.
-            if self.gesture_thread:  # Dacă există un fir de execuție pentru gesturi.
-                self.gesture_thread.join(timeout=1.0)  # Așteptăm ca firul să se termine.
-        else:  # Dacă controlul prin gesturi este dezactivat.
-            self.gesture_control_active = True  # Activăm controlul prin gesturi.
-            self.gesture_control_button.config(text="Dezactivare control gestual")  # Schimbăm textul butonului.
-            self.gesture_thread = threading.Thread(target=self.process_gestures, daemon=True)  # Creăm firul de execuție pentru procesarea gesturilor.
-            self.gesture_thread.start()  # Pornim firul de execuție.
+        if self.gesture_control_active:  # If gesture control is active.
+            self.gesture_control_active = False  # Disables gesture control.
+            self.gesture_control_button.config(text="Activate gesture control")  # Changes the button text.
+            if self.gesture_thread:  # If there is a thread for gestures.
+                self.gesture_thread.join(timeout=1.0)  # Waits for the thread to end.
+        else:  # If gesture control is disabled.
+            self.gesture_control_active = True  # Activate gesture control.
+            self.gesture_control_button.config(text="Disable gesture control")  # Changes the button text.
+            self.gesture_thread = threading.Thread(target=self.process_gestures, daemon=True)  # Creates the thread for processing gestures.
+            self.gesture_thread.start()  # Starts the execution thread.
 
-    # Funcția care procesează gesturile folosind camera video.
+    # The function that processes gestures using the video camera.
     def process_gestures(self):
-        cap = cv2.VideoCapture(0)  # Pornim camera video.
-        cap.set(cv2.CAP_PROP_FRAME_WIDTH, 320)  # Setăm lățimea cadrului video.
-        cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 240)  # Setăm înălțimea cadrului video.
+        cap = cv2.VideoCapture(0)  # Turn on the video camera.
+        cap.set(cv2.CAP_PROP_FRAME_WIDTH, 320)  # Sets the width of the video frame.
+        cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 240)  # Sets the height of the video frame.
 
-        last_gesture_time = time.time()  # Timpul ultimei gesturi procesate.
-        gesture_cooldown = 0.5  # Cooldown de 0.5 secunde între procesarea gesturilor.
-        frame_interval = 0.1  # Interval între cadrele analizate.
-        prev_frame = None  # Cadru anterior pentru detectarea mișcării.
+        last_gesture_time = time.time()  # The time of the last gesture processed.
+        gesture_cooldown = 0.5  # 0.5 second cooldown between processing gestures.
+        frame_interval = 0.1  # Interval between analyzed frames.
+        prev_frame = None  # Previous framework for motion detection.
 
-        while self.gesture_control_active:  # Cât timp controlul prin gesturi este activ.
-            current_time = time.time()  # Timpul curent.
-            if current_time - last_gesture_time < frame_interval:  # Verificăm intervalul dintre cadre.
-                time.sleep(0.01)  # Așteptăm puțin.
-                continue  # Trecem la următorul cadru.
+        while self.gesture_control_active:  # While gesture control is active.
+            current_time = time.time()  # Current time.
+            if current_time - last_gesture_time < frame_interval:  # Checks the interval between frames.
+                time.sleep(0.01)  # Waits a little.
+                continue  # Goes to the next frame.
 
-            ret, frame = cap.read()  # Citim un cadru din fluxul video.
-            if not ret:  # Dacă nu putem citi cadrul, continuăm.
+            ret, frame = cap.read()  # Reads a frame from the video stream.
+            if not ret:  # If it can't read the frame, it continues.
                 continue
 
-            frame = cv2.resize(frame, (160, 120))  # Redimensionăm cadrul video.
+            frame = cv2.resize(frame, (160, 120))  # Resizes the video frame.
 
-            if prev_frame is not None and not detect_motion(frame, prev_frame):  # Verificăm dacă există mișcare între cadre.
-                prev_frame = frame  # Actualizăm cadrul anterior.
-                continue  # Trecem la următorul cadru.
+            if prev_frame is not None and not detect_motion(frame, prev_frame):  # Checks for motion between frames.
+                prev_frame = frame  # Updates the previous frame.
+                continue  # Goes to the next frame.
 
-            gesture, confidence = recognize_gesture(frame)  # Recunoaștem gestul din cadru.
+            gesture, confidence = recognize_gesture(frame)  # Recognizes the gesture in the frame.
 
-            if gesture and confidence > 0.8 and (current_time - last_gesture_time) > gesture_cooldown:  # Dacă gestul este recunoscut cu o încredere mare.
-                last_gesture_time = current_time  # Actualizăm timpul ultimei gesturi.
-                self.master.after(0, lambda g=gesture: self.execute_gesture_command(g))  # Executăm comanda asociată gestului.
+            if gesture and confidence > 0.8 and (current_time - last_gesture_time) > gesture_cooldown:  # If the gesture is recognized with high confidence.
+                last_gesture_time = current_time  # Updates the time of the last gesture.
+                self.master.after(0, lambda g=gesture: self.execute_gesture_command(g))  # Executes the command associated with the gesture.
 
-            prev_frame = frame  # Actualizăm cadrul anterior.
-            time.sleep(0.05)  # Așteptăm înainte de a trece la următorul cadru.
+            prev_frame = frame  # Updates the previous frame.
+            time.sleep(0.05)  # Waits before moving to the next frame.
 
-        cap.release()  # Eliberăm camera video.
+        cap.release()  # Releases the video camera.
 
-    # Funcție pentru executarea comenzii asociate gestului recunoscut.
+    # Function for executing the command associated with the recognized gesture.
     def execute_gesture_command(self, gesture):
         print(f"Executing gesture: {gesture}")  # Afișăm gestul recunoscut în consolă.
         current_time = time.time()  # Timpul curent.
