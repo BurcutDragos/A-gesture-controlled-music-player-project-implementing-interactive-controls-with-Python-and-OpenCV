@@ -27,7 +27,7 @@ def collect_gesture_data():
             if key == 'c':
                 # Starts collecting data for a single gesture.
                 if collect_single_gesture(gesture, hands, mp_drawing):
-                    break # We exit the current loop after the data has been collected.
+                    break # Exits the current loop after the data has been collected.
             elif key == 'q':
                 # Next gesture message.
                 print(f"Go to next gesture.")
