@@ -32,7 +32,7 @@ class MusicPlayer:
 
         self.create_widgets()  # Creates the interface elements.
 
-        if self.songs:  # If there are songs, we load the first song.
+        if self.songs:  # If there are songs, it loads the first song.
             self.load_song()
 
         self.gesture_control_active = False  # Indicates whether gesture control is active.
@@ -125,7 +125,7 @@ class MusicPlayer:
 
     # The function that processes gestures using the video camera.
     def process_gestures(self):
-        cap = cv2.VideoCapture(0)  # Turn on the video camera.
+        cap = cv2.VideoCapture(0)  # Turns on the video camera.
         cap.set(cv2.CAP_PROP_FRAME_WIDTH, 320)  # Sets the width of the video frame.
         cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 240)  # Sets the height of the video frame.
 
