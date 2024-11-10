@@ -71,4 +71,4 @@ Start the application by running: python music_player.py
 This project is licensed under the GPL-3.0 License - see the LICENSE file for details.
 
 ## Author: 
-Burcut Ioan Dragos.
+Burcut Ioan Dragos, Burcut Vasile Cezar.
