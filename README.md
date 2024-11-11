@@ -35,13 +35,15 @@ Ensure you have Python 3.11 or 3.12 installed. You will also need to install the
 
 ### Installation:
 <b>1. Clone the Repository:</b>
-git clone https://github.com/YourUsername/GestureMusicPlayer.git
-cd GestureMusicPlayer
+git clone https://github.com/BurcutDragos/A-gesture-controlled-music-player-project-implementing-interactive-controls-with-Python-and-OpenCV.git
 
-<b>2. Install Dependencies:</b>
+<b>2. Navigate to the Project Directory:</b>
+cd A-gesture-controlled-music-player-project-implementing-interactive-controls-with-Python-and-OpenCV
+
+<b>3. Install Dependencies:</b>
 pip install -r requirements.txt
 
-<b>3. Organize Music Files: </b>
+<b>4. Organize Music Files: </b>
 Place your .mp3 music files in the Songs folder within the project directory. The naming format should ideally be "Artist - Title.mp3" for proper labeling within the interface. Files without this format will default to "Unknown - [Filename]".
 
 ### Running the Application:
