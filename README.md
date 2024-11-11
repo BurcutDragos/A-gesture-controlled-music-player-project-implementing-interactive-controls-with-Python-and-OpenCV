@@ -4,9 +4,9 @@
 ## Features:
 * <b>Gesture-Controlled Playback:</b> The application recognizes a variety of hand gestures to perform common music playback operations:
      * <b>Play/Pause:</b> Start or pause music playback with a "Play" or "Pause" gesture.
-     * <b>Next/Previous Track:</b> Skip to the next or previous track using hand gestures.
+     * <b>Next/Previous Track:</b> Skip to the next or previous track using "Next" or "Previous" hand gestures.
      * <b>Volume Adjustment:</b> Raise or lower volume with "Volume Up" or "Volume Down" gestures.
-     * <b>Repeat and Stop Functions:</b> Easily repeat the current song or stop playback using gestures.
+     * <b>Repeat and Stop Functions:</b> Easily repeat the current song or stop playback using "Repeat" and "Stop" hand gestures.
      * <b>Exit Application:</b> The "Rock and Roll" gesture will close the application.
 * <b>Keyboard and Mouse Compatibility:</b> For added flexibility, all playback functions are also accessible via keyboard shortcuts and mouse controls:
      * <b>Keyboard Controls:</b>
@@ -22,16 +22,19 @@
 
 ## Getting Started:
 ### Prerequisites:
-Ensure you have Python 3.11 or 3.12 installed. You will also need to install the following libraries:
-* <b>OpenCV:</b> pip install opencv-python
-* <b>Pygame:</b> pip install pygame
-* <b>Mediapipe:</b> pip install mediapipe
-* <b>Mutagen:</b> pip install mutagen
-* <b>Tkinter:</b> pip install tkinter
-* <b>Time:</b> pip install time
-* <b>OS:</b> pip install os-sys
-* <b>TensorFlow:</b> pip install tensorflow
-* <b>NumPy:</b> pip install numpy
+* <b>Programming Language:</b> Python
+* <b>Development Environment:</b> PyCharm
+* <b>Libraries:</b>
+<br>Ensure you have Python 3.11 or 3.12 installed. You will also need to install the following libraries:
+  * <b>OpenCV:</b> pip install opencv-python
+  * <b>Pygame:</b> pip install pygame
+  * <b>Mediapipe:</b> pip install mediapipe
+  * <b>Mutagen:</b> pip install mutagen
+  * <b>Tkinter:</b> pip install tkinter
+  * <b>Time:</b> pip install time
+  * <b>OS:</b> pip install os-sys
+  * <b>TensorFlow:</b> pip install tensorflow
+  * <b>NumPy:</b> pip install numpy
 
 ### Installation:
 <b>1. Clone the Repository:</b>
