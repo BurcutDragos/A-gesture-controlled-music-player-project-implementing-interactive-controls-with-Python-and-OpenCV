@@ -53,10 +53,13 @@ Place your .mp3 music files in the Songs folder within the project directory. Th
 Start the application by running: python music_player.py
 
 ## Usage Instructions:
-* <b>Activate Gesture Control:</b> Click the "Enable Gesture Control" button to start controlling the player with gestures. The camera will automatically activate to recognize hand gestures.
+* <b>Activate Gesture Control:</b> Click the "Enable Gesture Control" button to start controlling the player with gestures. The camera will automatically activate to recognize hand gestures. A demo video showing gesture interaction with this app will coming soon.
 * <b>Gesture Controls:</b>
-    * Show a "Thumb Up" gesture to repeat the current song.
-    * Make a "Victory" sign to stop the current song.
+    * <b>Play/Pause:</b> Start or pause the current song with a "Play" or "Pause" gesture.
+    * <b>Next/Previous:</b> Skip to the next or previous track using "Next" or "Previous" hand gestures.
+    * <b>Volume Up/Down:</b> Raise or lower volume with "Volume Up" or "Volume Down" gestures.
+    * <b>Repeat and Stop:</b> Easily repeat the current song or stop playback using "Repeat" (Thumb Up sign) and "Stop" (Victory sign) hand gestures.
+    * <b>Exit:</b> The "Rock and Roll" gesture will close the application.
     * <b>Note:</b> To use gesture control effectively, maintain proper lighting and adjust hand positions as needed for accurate recognition.
 
 ## Project Structure:
@@ -75,8 +78,19 @@ Start the application by running: python music_player.py
 * Support for different media formats (e.g., .wav, .flac).
 * Implementing improved error handling and user feedback.
 
+## Contributing:
+1. Fork the repository.
+2. Create a new branch: <b>git checkout -b my-feature-branch</b>
+3. Make your changes and commit them: <b>git commit -m 'Add some feature'</b>
+4. Push to the branch: <b>git push origin my-feature-branch</b>
+5. Submit a pull request.
+
 ## License:
 This project is licensed under the GPL-3.0 License - see the LICENSE file for details.
 
 ## Authors: 
 Burcut Ioan Dragos, Burcut Vasile Cezar.
+
+## Acknowledgments:
+* Thanks to OpenAI for providing assistance in the development of this project.
+* Special thanks to the developers of TensorFlow, OpenCV, and other open-source projects used in this application.
