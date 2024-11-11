@@ -23,15 +23,15 @@
 ## Getting Started:
 ### Prerequisites:
 Ensure you have Python 3.11 or 3.12 installed. You will also need to install the following libraries:
-* OpenCV: pip install opencv-python
-* Pygame: pip install pygame
-* Mediapipe: pip install mediapipe
-* Mutagen: pip install mutagen
-* Tkinter: pip install tkinter
-* Time: pip install time
-* OS: pip install os-sys
-* TensorFlow: pip install tensorflow
-* NumPy: pip install numpy
+* <b>OpenCV:</b> pip install opencv-python
+* <b>Pygame:</b> pip install pygame
+* <b>Mediapipe:</b> pip install mediapipe
+* <b>Mutagen:</b> pip install mutagen
+* <b>Tkinter:</b> pip install tkinter
+* <b>Time:</b> pip install time
+* <b>OS:</b> pip install os-sys
+* <b>TensorFlow:</b> pip install tensorflow
+* <b>NumPy:</b> pip install numpy
 
 ### Installation:
 <b>1. Clone the Repository:</b>
@@ -55,12 +55,15 @@ Start the application by running: python music_player.py
     * <b>Note:</b> To use gesture control effectively, maintain proper lighting and adjust hand positions as needed for accurate recognition.
 
 ## Project Structure:
-* gesture_collector.py: collects gesture data through the video camera. Using Mediapipe for hand detection, it captures hand landmarks and saves them as .npy files. The collected data is later used to train the gesture recognition model, enabling accurate gesture identification.
-* gesture_model.py: defines the neural network model used for gesture recognition. It loads the previously saved gesture data, prepares it for training, and creates a model that can classify different gestures based on hand landmarks. The trained model is then saved for later use in the gesture recognition application.
-* gesture_recognizer.py: Defines the gesture recognition logic, utilizing the camera and Mediapipe's hand landmark detection.
-* music_player.py: Core file containing the music player functionality.
-* Songs/: Folder where all playable music files are stored.
-* requirements.txt: Contains all required Python libraries for easy setup.
+* <b>gesture_model.h5:</b> This file is the saved gesture recognition model in HDF5 format, which is specific to TensorFlow and Keras. The .h5 file contains the model's architecture, trained weights, and configuration, enabling quick loading and use of the model in TensorFlow/Keras-based projects. This format is particularly useful for development, testing, and updating the model in environments that support TensorFlow.
+* <b>gesture_model.onnx:</b> This file represents the same gesture recognition neural network saved in the ONNX (Open Neural Network Exchange) format. ONNX is an open standard that allows the model to be used across various frameworks (such as PyTorch, Caffe2, and other compatible libraries). This format makes the model more portable and interoperable, enabling deployment across a broader range of applications and platforms.
+* <b>gesture_collector.py:</b> collects gesture data through the video camera. Using Mediapipe for hand detection, it captures hand landmarks and saves them as .npy files. The collected data is later used to train the gesture recognition model, enabling accurate gesture identification.
+* <b>gesture_model.py:</b> defines the neural network model used for gesture recognition. It loads the previously saved gesture data, prepares it for training, and creates a model that can classify different gestures based on hand landmarks. The trained model is then saved for later use in the gesture recognition application.
+* <b>gesture_recognizer.py:</b> Defines the gesture recognition logic, utilizing the camera and Mediapipe's hand landmark detection.
+* <b>music_player.py:</b> Core file containing the music player functionality.
+* <b>Songs/:</b> Folder where all playable music files are stored.
+* <b>gestures/:</b> The gestures folder stores the captured gesture data as .npy files, where each file represents the hand landmarks (coordinates of reference points) for a specific gesture. These files are essential for training the gesture recognition model, enabling it to learn the unique characteristics of each gestures.
+* <b>requirements.txt:</b> Contains all required Python libraries for easy setup.
 
 ## Future Enhancements:
 * Adding more customizable gesture options.
