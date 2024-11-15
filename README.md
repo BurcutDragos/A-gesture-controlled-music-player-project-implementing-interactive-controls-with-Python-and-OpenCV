@@ -89,7 +89,7 @@ Start the application by running: python music_player.py
 This project is licensed under the GPL-3.0 License - see the LICENSE file for details.
 
 ## Authors: 
-Burcut Ioan Dragos, Burcut Vasile Cezar.
+Burcut Ioan Dragos.
 
 ## Acknowledgments:
 * Thanks to OpenAI for providing assistance in the development of this project.
